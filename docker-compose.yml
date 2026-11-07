@@ -1,0 +1,225 @@
+services:
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: ops-neo4j
+    restart: unless-stopped
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/hackathon_secret_password
+      - NEO4J_PLUGINS=["apoc"]
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p hackathon_secret_password 'RETURN 1' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+  neo4j-mcp-ro:
+    build: ./services/mcp-neo4j
+    container_name: ops-neo4j-mcp-ro
+    restart: unless-stopped
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=hackathon_secret_password
+      - READ_ONLY=true
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  neo4j-mcp-rw:
+    build: ./services/mcp-neo4j
+    container_name: ops-neo4j-mcp-rw
+    restart: unless-stopped
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=hackathon_secret_password
+      - READ_ONLY=false
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mcp-teams:
+    build: ./services/mcp-teams
+    container_name: ops-mcp-teams
+    restart: unless-stopped
+    environment:
+      - DATA_DIR=/data
+    volumes:
+      - ./data/teams:/data:ro
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mcp-email:
+    build: ./services/mcp-email
+    container_name: ops-mcp-email
+    restart: unless-stopped
+    environment:
+      - DATA_DIR=/data
+    volumes:
+      - ./data/email:/data:ro
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mcp-sms:
+    build: ./services/mcp-sms
+    container_name: ops-mcp-sms
+    restart: unless-stopped
+    environment:
+      - DATA_DIR=/data
+    volumes:
+      - ./data/sms:/data:ro
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: ops-chromadb
+    restart: unless-stopped
+    volumes:
+      - chroma_data:/data
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/8000 && echo -e \"GET /api/v2/heartbeat HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n\" >&3 && cat <&3 | grep -q \"200 OK\"' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  rag-mcp:
+    build: ./services/rag
+    container_name: ops-rag-mcp
+    restart: unless-stopped
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - COLLECTION_NAME=ops_knowledge
+    volumes:
+      - ./data:/data:ro
+    depends_on:
+      chromadb:
+        condition: service_healthy
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  agents:
+    build: ./services/agents
+    container_name: ops-agents
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=hackathon_secret_password
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://api.openai.com/v1}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o-mini}
+      - RAG_MCP_URL=http://rag-mcp:8000/sse
+      - TEAMS_MCP_URL=http://mcp-teams:8000/sse
+      - EMAIL_MCP_URL=http://mcp-email:8000/sse
+      - SMS_MCP_URL=http://mcp-sms:8000/sse
+      - NEO4J_MCP_RO_URL=http://neo4j-mcp-ro:8000/sse
+      - NEO4J_MCP_RW_URL=http://neo4j-mcp-rw:8000/sse
+      - STATE_STORAGE_PATH=/app/processed_items.json
+    volumes:
+      - ./data:/data:ro
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      neo4j-mcp-ro:
+        condition: service_healthy
+      neo4j-mcp-rw:
+        condition: service_healthy
+      mcp-teams:
+        condition: service_healthy
+      mcp-email:
+        condition: service_healthy
+      mcp-sms:
+        condition: service_healthy
+      rag-mcp:
+        condition: service_healthy
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")' || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ops-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      agents:
+        condition: service_healthy
+    networks:
+      - ops_net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3000/ || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  ops_net:
+    driver: bridge
+
+volumes:
+  neo4j_data:
+  chroma_data:

@@ -1,0 +1,38 @@
+{
+  "channel": "sms",
+  "conversation_id": "TH-S-001",
+  "note": "Synthetic.",
+  "participants": [
+    "Pekka Pohjola",
+    "Sanna Saarinen"
+  ],
+  "messages": [
+    {
+      "seq": 1,
+      "timestamp": "2026-01-14T09:52:00+02:00",
+      "from": "Pekka Pohjola",
+      "to": [
+        "Sanna Saarinen"
+      ],
+      "text": "At SAL-03 road. Barrier is locked and I have no key. Anyone know where the key is?"
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-01-14T11:20:00+02:00",
+      "from": "Sanna Saarinen",
+      "to": [
+        "Pekka Pohjola"
+      ],
+      "text": "Found an old email from you (Oct 2024): key is at Sallan Kyläkauppa. Return it the same day."
+    },
+    {
+      "seq": 3,
+      "timestamp": "2026-01-14T11:22:00+02:00",
+      "from": "Pekka Pohjola",
+      "to": [
+        "Sanna Saarinen"
+      ],
+      "text": "Ok, driving there now."
+    }
+  ]
+}

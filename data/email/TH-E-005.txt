@@ -1,0 +1,22 @@
+From: mikko.virtanen@elisa.fi
+To: field-operations@elisa.fi, noc-core@elisa.fi
+Date: 2026-11-07T08:55:00+02:00
+Subject: Operational Note: TRN-117 (WO-2026-1107-003) zero-traffic workaround
+
+Team,
+
+For work order WO-2026-1107-003 at site OUL-05 (Kiiminki mast):
+Field reported that after replacing the SFP on TRN-117 interface 1/1/3, optical link came UP with clear alarms, but traffic remained at zero bytes.
+
+Solution:
+On TX-2000 hardware running firmware 4.1 or older:
+1. Do not replace optical transceivers or reboot chassis.
+2. Disable the interface ('shutdown').
+3. Wait 30 seconds for ASIC buffer clearing.
+4. Enable the interface ('no shutdown').
+
+This immediately flushes the forwarding table and restores carrier traffic. Please apply this to any similar incidents on 2019-era TX-2000 units.
+
+Regards,
+Mikko Virtanen
+Principal Transmission Specialist

@@ -1,0 +1,33 @@
+{
+  "channel": "teams",
+  "thread_id": "TH-T-003",
+  "topic": "MWR-261 RSL degraded",
+  "note": "Synthetic. Names and node IDs are illustrative.",
+  "participants": [
+    "Pekka Pohjola",
+    "Sanna Saarinen"
+  ],
+  "messages": [
+    {
+      "seq": 1,
+      "timestamp": "2026-11-03T10:02:00+02:00",
+      "author": "Sanna Saarinen",
+      "role": "NOC Operator",
+      "text": "MWR-261 at Inari again flagging RSL degraded this morning. Should we dispatch?"
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-11-03T10:06:00+02:00",
+      "author": "Pekka Pohjola",
+      "role": "Field Engineer",
+      "text": "No need yet. That radio link ices up every winter, roughly November to March. RSL drops a few dB and traffic moves to the fiber path. Only send someone if it's degraded for more than 6 hours or the fiber is also down."
+    },
+    {
+      "seq": 3,
+      "timestamp": "2026-11-03T10:07:00+02:00",
+      "author": "Sanna Saarinen",
+      "role": "NOC Operator",
+      "text": "Ok thanks, I'll keep an eye on it."
+    }
+  ]
+}

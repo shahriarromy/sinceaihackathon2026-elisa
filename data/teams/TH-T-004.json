@@ -1,0 +1,26 @@
+{
+  "channel": "teams",
+  "thread_id": "TH-T-004",
+  "topic": "TX-2000 firmware 4.2",
+  "note": "Synthetic. Names and node IDs are illustrative.",
+  "participants": [
+    "Aino Asiantuntija",
+    "Erkki Expert"
+  ],
+  "messages": [
+    {
+      "seq": 1,
+      "timestamp": "2026-09-22T10:15:00+03:00",
+      "author": "Aino Asiantuntija",
+      "role": "Transmission Specialist",
+      "text": "FYI: TX-2000 firmware 4.2 release notes say it fixes forwarding table re-initialisation after optical module hot-swap. That's the stuck-traffic-after-SFP-swap thing Erkki found on TRN-042. TRN-042 got 4.2 on 20 Sep. Units still on 4.1 or older still need the interface disable/enable trick."
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-09-22T10:20:00+03:00",
+      "author": "Erkki Expert",
+      "role": "Network Expert",
+      "text": "Good news. Agree - keep doing the bounce on anything below 4.2."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "channel": "teams",
+  "thread_id": "TH-T-006",
+  "topic": "TRN-117 resolution - SFP traffic recovered",
+  "note": "Synthetic expert resolution knowledge for WO-2026-1107-003",
+  "participants": [
+    "Jari Järvinen",
+    "Mikko Virtanen",
+    "Sanna Saarinen"
+  ],
+  "messages": [
+    {
+      "seq": 1,
+      "timestamp": "2026-11-07T08:48:00+02:00",
+      "author": "Mikko Virtanen",
+      "role": "Principal Transmission Specialist",
+      "text": "Saw the thread on TRN-117 port 1/1/3. Do NOT swap the SFP again or reboot the node! On TX-2000 running firmware 4.1, optical hot-swap leaves the internal forwarding ASIC in a paused state even when alarms are clear."
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-11-07T08:50:00+02:00",
+      "author": "Mikko Virtanen",
+      "role": "Principal Transmission Specialist",
+      "text": "Workaround: Disable port 1/1/3 ('interface 1/1/3 shutdown'), wait 30 seconds, then re-enable it ('no shutdown'). Forwarding ASIC reinitializes and traffic will flow immediately."
+    },
+    {
+      "seq": 3,
+      "timestamp": "2026-11-07T08:52:00+02:00",
+      "author": "Jari Järvinen",
+      "role": "Field Engineer",
+      "text": "Flapped 1/1/3 as advised. Traffic counters jumped to 4.2 Gbps right away, services SVC-MBH-0117 and SVC-MBH-0125 restored. No hardware reboot needed."
+    }
+  ]
+}

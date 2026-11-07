@@ -1,0 +1,55 @@
+{
+  "channel": "teams",
+  "thread_id": "TH-T-002",
+  "topic": "TRN-021 CRC errors after storm",
+  "note": "Synthetic. Names and node IDs are illustrative.",
+  "participants": [
+    "Aino Asiantuntija",
+    "Mikko Mäkelä",
+    "Veikko Vikkelä"
+  ],
+  "messages": [
+    {
+      "seq": 1,
+      "timestamp": "2026-07-18T14:32:00+03:00",
+      "author": "Veikko Vikkelä",
+      "role": "Field Engineer",
+      "text": "TRN-021 port 1/1/3 CRC errors climbing since the storm last night. Link up, optics -6 dBm. What should I check first?"
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-07-18T14:35:00+03:00",
+      "author": "Aino Asiantuntija",
+      "role": "Transmission Specialist",
+      "text": "On the TX-3000s I always start with the connectors. After thunderstorms we've had dirty or damaged patch connectors at Hervanta twice. Clean and inspect both ends before anything else."
+    },
+    {
+      "seq": 3,
+      "timestamp": "2026-07-18T14:38:00+03:00",
+      "author": "Mikko Mäkelä",
+      "role": "Network Expert",
+      "text": "I disagree, connectors were fine last time. On TX-3000 the line card gets into a bad state after power dips - reseat the line card, that fixed TRN-001 in May."
+    },
+    {
+      "seq": 4,
+      "timestamp": "2026-07-18T14:40:00+03:00",
+      "author": "Aino Asiantuntija",
+      "role": "Transmission Specialist",
+      "text": "Reseating takes the whole card's traffic down. Connectors first, it's cheaper."
+    },
+    {
+      "seq": 5,
+      "timestamp": "2026-07-18T14:52:00+03:00",
+      "author": "Veikko Vikkelä",
+      "role": "Field Engineer",
+      "text": "Cleaned connectors, CRC count dropped but not zero. Leaving it under monitoring."
+    },
+    {
+      "seq": 6,
+      "timestamp": "2026-07-18T15:30:00+03:00",
+      "author": "Mikko Mäkelä",
+      "role": "Network Expert",
+      "text": "If it continues tomorrow, reseat."
+    }
+  ]
+}

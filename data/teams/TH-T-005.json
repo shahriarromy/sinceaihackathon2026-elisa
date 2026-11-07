@@ -1,0 +1,26 @@
+{
+  "channel": "teams",
+  "thread_id": "TH-T-005",
+  "topic": "TRN-117 traffic not back",
+  "note": "Synthetic. Names and node IDs are illustrative.",
+  "participants": [
+    "Jari Järvinen",
+    "Sanna Saarinen"
+  ],
+  "messages": [
+    {
+      "seq": 1,
+      "timestamp": "2026-11-07T08:41:00+02:00",
+      "author": "Jari Järvinen",
+      "role": "Field Engineer",
+      "text": "Swapped the SFP on TRN-117 port 1/1/3. Link up, LOS cleared, but traffic hasn't come back. Anyone?"
+    },
+    {
+      "seq": 2,
+      "timestamp": "2026-11-07T08:44:00+02:00",
+      "author": "Sanna Saarinen",
+      "role": "NOC Operator",
+      "text": "Maybe the whole SFP batch is bad? We had a few from the same delivery."
+    }
+  ]
+}

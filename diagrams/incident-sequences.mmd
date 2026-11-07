@@ -1,0 +1,86 @@
+---
+title: Incident sequences (Elisa x Since AI 2026 demo network)
+---
+flowchart TB
+
+  %% ---------------------------------------------------------------
+  %% One lane per work order. Steps in time order, left to right.
+  %% Arrow labels show waiting time where it matters.
+  %% Hexagon = captured knowledge (ContextAssertion) in Neo4j.
+  %% Colours: fault=red, analysis=violet, field action=teal,
+  %% site access=amber, status change=grey, recovered=green.
+  %% ---------------------------------------------------------------
+
+  subgraph W1["WO-2026-0114-002 · Locked barrier · TRN-233 (TX-2000, SAL-03 Salla) · 14 Jan 2026 · RESOLVED · 6 h 8 min"]
+    direction LR
+    A1["06:40<br/>Device unreachable"]:::fault --> A2["06:55<br/>AI root cause: PSU"]:::analysis
+    A2 --> A3["07:05<br/>Dispatch"]:::field
+    A3 --> A4["09:50<br/>Access blocked by barrier"]:::accessBlock
+    A4 -- "1 h 45 min lost" --> A5["11:35<br/>Access granted, key found"]:::access
+    A5 --> A6["12:40<br/>PSU replaced"]:::field
+    A6 --> A7["12:48<br/>Alarm cleared"]:::recovery
+    K1{{"CA-0002 · EXISTED, NOT USED<br/>Key at Sallan Kyläkauppa<br/>(Pekka, email Oct 2024)"}}:::missed
+    A4 -.- K1
+  end
+
+  subgraph W2["WO-2026-0312-007 · Erkki's case · TRN-042 (TX-2000, TRE-03 Nokia) · 12 Mar 2026 · RESOLVED · 1 h 23 min"]
+    direction LR
+    B1["08:02<br/>Loss of signal"]:::fault --> B2["08:10<br/>Dispatch"]:::field
+    B2 --> B3["09:05<br/>SFP replaced"]:::field
+    B3 --> B4["09:06<br/>Alarm cleared, interface UP"]:::state
+    B4 -- "19 min UP but no traffic" --> B5["09:23<br/>Interface disabled"]:::field
+    B5 --> B6["09:24<br/>Interface enabled"]:::field
+    B6 --> B7["09:25<br/>Traffic restored"]:::recovery
+    K2{{"CA-0001 · CAPTURED HERE<br/>Disable/enable the interface after SFP swap<br/>(Erkki, Teams + email)"}}:::known
+    B5 -.- K2
+  end
+
+  subgraph W3["WO-2026-0718-011 · Conflicting advice · TRN-021 (TX-3000, TRE-01 Hervanta) · 18-19 Jul 2026 · RESOLVED · 19 h 45 min"]
+    direction LR
+    C1["14:20<br/>CRC errors"]:::fault --> C2["14:50<br/>Connectors cleaned"]:::field
+    C2 -- "next day" --> C3["+1d 08:30<br/>CRC errors again"]:::fault
+    C3 --> C4["+1d 09:55<br/>Line card reseated"]:::field
+    C4 --> C5["+1d 10:05<br/>Cleared"]:::recovery
+    K3a{{"CA-0004 · DISPUTED<br/>Clean connectors first (Aino)"}}:::disputed
+    K3b{{"CA-0005 · DISPUTED<br/>Reseat the line card (Mikko)"}}:::disputed
+    C2 -.- K3a
+    C4 -.- K3b
+  end
+
+  subgraph W4["WO-2026-1003-004 · Routine visit · MWR-233 (MW-500, SAL-03 Salla) · 3 Oct 2026 · ROUTINE"]
+    direction LR
+    D1["09:05<br/>Barrier opened with keybox code"]:::access
+    K4{{"CA-0003 · CONFIRMED BY THIS VISIT<br/>Keybox code from the NOC (Sanna, email)"}}:::known
+    D1 -.- K4
+  end
+
+  subgraph W5["WO-2026-1107-003 · Traffic not restored · TRN-117 (TX-2000 fw 4.1, OUL-05 Kiiminki) · 7 Nov 2026 · OPEN"]
+    direction LR
+    E1["07:12<br/>Loss of signal"]:::fault --> E2["07:20<br/>Dispatch"]:::field
+    E2 --> E3["08:35<br/>SFP replaced"]:::field
+    E3 --> E4["08:36<br/>Alarm cleared, interface UP"]:::state
+    E4 -- "UP but no traffic (ongoing)" --> E5(["08:45<br/>Traffic still zero"]):::pending
+    K5{{"CA-0009 · MATCHES 4/4 SYMPTOMS<br/>Disable interface, wait 30 s, enable<br/>(Erkki, Aino; learned on TRN-042)"}}:::known
+    E5 -.- K5
+  end
+
+  %% stack the lanes top to bottom in date order
+  W1 ~~~ W2 ~~~ W3 ~~~ W4 ~~~ W5
+
+  classDef fault       fill:#fbe7e4,stroke:#c0392b,color:#142029
+  classDef analysis    fill:#ece6fb,stroke:#6a4bc4,color:#142029
+  classDef field       fill:#e3f1f3,stroke:#0a6c78,color:#142029
+  classDef access      fill:#fbefdc,stroke:#a8660b,color:#142029
+  classDef accessBlock fill:#fbefdc,stroke:#a8660b,stroke-width:3px,color:#142029
+  classDef state       fill:#edf2f5,stroke:#6b7b88,color:#142029
+  classDef recovery    fill:#e2f3e9,stroke:#2a7d4f,color:#142029
+  classDef pending     fill:#ffffff,stroke:#c0392b,stroke-width:2px,stroke-dasharray:5 4,color:#c0392b
+  classDef known       fill:#dcf0f2,stroke:#0a6c78,color:#0a4f58
+  classDef disputed    fill:#fbefdc,stroke:#a8660b,color:#6b4208
+  classDef missed      fill:#fbe7e4,stroke:#c0392b,color:#7a231a
+
+  style W1 fill:#ffffff,stroke:#d6dfe5
+  style W2 fill:#ffffff,stroke:#d6dfe5
+  style W3 fill:#ffffff,stroke:#d6dfe5
+  style W4 fill:#ffffff,stroke:#d6dfe5
+  style W5 fill:#fff7f6,stroke:#c0392b,stroke-width:2px

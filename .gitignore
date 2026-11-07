@@ -1,0 +1,27 @@
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.ruff_cache/
+
+# Docker volumes and local data
+neo4j_data/
+chroma_data/
+services/agents/captured_assertions.json
+services/agents/processed_items.json
+
+# IDE files
+.vscode/
+.idea/
