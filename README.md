@@ -131,7 +131,7 @@ The **Resolution Timelines** view visualizes how field knowledge evolved across 
 5. `WO-003`: Today's open incident, successfully resolved with the captured workaround.
 
 ![Resolution Timelines](docs/screenshots/04-incident-sequences-swimlanes.png)
-*Suggested capture: `docs/screenshots/04-incident-sequences-swimlanes.png` — Shows the 5 horizontal incident lanes with step status badges and linked knowledge hexagons.*
+*Shows the 5 horizontal incident lanes with step status badges and linked knowledge hexagons.*
 
 ---
 
@@ -139,7 +139,7 @@ The **Resolution Timelines** view visualizes how field knowledge evolved across 
 The **Knowledge Collector** settings view monitors health across all 10 microservices and allows operators to inspect raw Teams threads, field emails, and SMS alerts.
 
 ![Knowledge Collector Settings](docs/screenshots/05-team-knowledge-collector-settings.png)
-*Suggested capture: `docs/screenshots/05-team-knowledge-collector-settings.png` — Shows service health checks, collection statistics, and the raw channel message inspector.*
+*Shows service health checks, collection statistics, and the raw channel message inspector.*
 
 ---
 
