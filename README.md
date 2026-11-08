@@ -102,7 +102,7 @@ Below are the primary views in the web interface (`http://localhost:3000`), illu
 When investigating open work order `WO-2026-1107-003` (TRN-117 Kiiminki mast), the Incident Investigator finds that alarms have cleared but traffic remains at zero, with no recorded fix in the database. Instead of failing silently, it presents an interactive capture prompt with all communication channels pre-selected.
 
 ![Incident Investigation - No Prior Fix Found](docs/screenshots/01-incident-investigation-baseline.png)
-*Suggested capture: `docs/screenshots/01-incident-investigation-baseline.png` — Shows the "No Prior Fix Found · Capture Team Advice" card with Teams, Email, and SMS chips selected.*
+*Shows the "No Prior Fix Found · Capture Team Advice" card with Teams, Email, and SMS chips selected.*
 
 ---
 
@@ -110,7 +110,7 @@ When investigating open work order `WO-2026-1107-003` (TRN-117 Kiiminki mast), t
 The operator clicks **"Capture Fix & Re-investigate"**. The Knowledge Collector reads the latest communications across the selected channels, extracts the expert workaround, links it to `TRN-117` in the graph, and saves it in Chroma RAG.
 
 ![Knowledge Capture Action](docs/screenshots/02-multi-channel-capture-action.png)
-*Suggested capture: `docs/screenshots/02-multi-channel-capture-action.png` — Displays the live progress notification as the Knowledge Collector scans field channels.*
+*Displays the live progress notification as the Knowledge Collector scans field channels.*
 
 ---
 
@@ -118,7 +118,7 @@ The operator clicks **"Capture Fix & Re-investigate"**. The Knowledge Collector 
 The Investigator re-runs automatically with the newly captured advice. The incident report updates to **100% confidence**, citing Mikko Virtanen's port flap workaround and presenting an ordered, step-by-step action plan for the technician.
 
 ![Incident Resolved with Workaround](docs/screenshots/03-incident-resolved-with-workaround.png)
-*Suggested capture: `docs/screenshots/03-incident-resolved-with-workaround.png` — Displays the green verified workaround card, source attribution, and ordered 5-step operational checklist.*
+*Displays the green verified workaround card, source attribution, and ordered 5-step operational checklist.*
 
 ---
 
